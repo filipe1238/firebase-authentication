@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from 'react-router-dom'
+import Navbar from './components/Navbar';
+import Error from './components/Error';
+import Home from './components/Home';
+import Login from './components/Login';
+import { useState } from 'react';
+import Search from './components/Search';
 
+import './App.css'
 function App() {
+  const [showNav, setShowNav] = useState(true);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {showNav && <Navbar />}
+
+      {/* Switch === Routes */}
+      <Routes>
+        <Route path='/' element={<Home />} />
+        {/* url param */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/login" element={<Login setShowNav={setShowNav} />} />
+        <Route path="*" element={<Error />} />
+
+
+
+      </Routes>
+
+    </>
   );
 }
 
