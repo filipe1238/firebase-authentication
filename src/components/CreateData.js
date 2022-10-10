@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { GoArrowLeft } from "react-icons/go";
 import { BsGoogle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -6,22 +6,23 @@ import Alert from './Alert';
 import { app } from "../firebaseConfig"
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import './login.css';
-import { type } from '@testing-library/user-event/dist/type';
 
-function Login({ setShowNav }) {
+
+const CreateData = () => {
   let auth = getAuth(app);
   let googleProvider = new GoogleAuthProvider(app)
   let navigate = useNavigate();
+
+
   const [data, setData] = useState({});
   const [message, setMessage] = useState('initial message, no errors')
   const [messageType, setMessageType] = useState('');
   const [isMessageVis, setMessageVis] = useState(false);
-  
-  useEffect(() => {
-    setShowNav(false);
-  }, []);
 
+  const handleChange = (event) => {
+    let newInput = { [event.target.name]: event.target.value }
+    setData({ ...data, ...newInput });
+  }
   const removeAlert = () => {
     setMessage('')
     setMessageType('')
@@ -32,32 +33,29 @@ function Login({ setShowNav }) {
     setMessageType(type)
     setMessageVis(true);
   }
-
-
-
-
-
-  const handleChange = (event) => {
-    let newInput = { [event.target.name]: event.target.value }
-    setData({ ...data, ...newInput });
-  }
   const handleSubmit = (event) => {
     event.preventDefault();
     /* use 'createUserWithEmailAndPassword' for registrations */
-    signInWithEmailAndPassword(auth, data.email, data.password)
+    createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((response) => {
-        console.log(response.user);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        /*    const stringifiedPerson = localStorage.getItem('user'); */
-        const personAsObjectAgain = JSON.parse(localStorage.getItem('user'));
-        setShowNav(true);
-        navigate("/");
+        showAlert('User Created Succesfully', 'success');
+        setTimeout(function () {
+          setMessage('');
+          showAlert();
+          navigate("/");
+        }, 1500);
+        /*console.log(response.user);
+                localStorage.setItem('user', JSON.stringify(response.user)); 
+                   const stringifiedPerson = localStorage.getItem('user'); 
+               const personAsObjectAgain = JSON.parse(localStorage.getItem('user'));
+                navigate("/");  */
       })
       .catch((err) => {
-        showAlert(err.message, 'danger')
+        showAlert(err.message, 'danger');
         setTimeout(function () {
-          removeAlert()
-        }, 5000);
+          setMessage('');
+          showAlert();
+        }, 6000);
       })
   }
   return (
@@ -66,7 +64,7 @@ function Login({ setShowNav }) {
         <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
           <div className="card border-0 shadow rounded-3 my-5">
             <div className="card-body p-4 p-sm-5">
-              <h5 className="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
+              <h5 className="card-title text-center mb-5 fw-light fs-5">Sign Up</h5>
               <form onSubmit={(e) => {
                 handleSubmit(e)
               }}>
@@ -104,10 +102,10 @@ function Login({ setShowNav }) {
                 <div className="d-grid gap-3">
                   <div className="p-2 bg-light">
                     <button className="btn btn-secondary btn-login text-uppercase fw-bold" type="submit">
-                      Sign in
+                      Sign Up
                     </button></div>
                   <div>
-                    {isMessageVis && <Alert message={message} type={messageType} />}
+                    {isMessageVis && <Alert type={messageType} message={message} />}
                   </div>
                   <div>
                     <p>Or choose</p>
@@ -139,4 +137,4 @@ function Login({ setShowNav }) {
   )
 }
 
-export default Login
+export default CreateData
