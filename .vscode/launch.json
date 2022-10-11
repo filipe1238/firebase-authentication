@@ -4,9 +4,12 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+  
     {
       "type": "chrome",
+      /* use lanch for new non cache chrome tab */
       "request": "launch",
+      /* "request": "attach", */
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}"

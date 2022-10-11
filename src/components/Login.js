@@ -6,7 +6,7 @@ import Alert from './Alert';
 import { app } from "../firebaseConfig"
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import './login.css';
+import './styles.css';
 import { type } from '@testing-library/user-event/dist/type';
 
 function Login({ setShowNav }) {
@@ -17,7 +17,7 @@ function Login({ setShowNav }) {
   const [message, setMessage] = useState('initial message, no errors')
   const [messageType, setMessageType] = useState('');
   const [isMessageVis, setMessageVis] = useState(false);
-  
+
   useEffect(() => {
     setShowNav(false);
   }, []);
@@ -54,10 +54,7 @@ function Login({ setShowNav }) {
         navigate("/");
       })
       .catch((err) => {
-        showAlert(err.message, 'danger')
-        setTimeout(function () {
-          removeAlert()
-        }, 5000);
+        showAlert(err.message, 'danger');
       })
   }
   return (
@@ -107,7 +104,7 @@ function Login({ setShowNav }) {
                       Sign in
                     </button></div>
                   <div>
-                    {isMessageVis && <Alert message={message} type={messageType} />}
+                    {isMessageVis && <Alert message={message} type={messageType} removeAlert={removeAlert}/>}
                   </div>
                   <div>
                     <p>Or choose</p>

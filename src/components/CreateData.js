@@ -41,7 +41,6 @@ const CreateData = () => {
         showAlert('User Created Succesfully', 'success');
         setTimeout(function () {
           setMessage('');
-          showAlert();
           navigate("/");
         }, 1500);
         /*console.log(response.user);
@@ -105,7 +104,7 @@ const CreateData = () => {
                       Sign Up
                     </button></div>
                   <div>
-                    {isMessageVis && <Alert type={messageType} message={message} />}
+                    {isMessageVis && <Alert type={messageType} message={message} removeAlert={removeAlert} />}
                   </div>
                   <div>
                     <p>Or choose</p>

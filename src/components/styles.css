@@ -1,4 +1,3 @@
-
 .btn-login {
   font-size: 0.9rem;
   letter-spacing: 0.05rem;
@@ -18,9 +17,10 @@
 .icon-backarrow {
   height: 3rem;
   width: auto;
-  background-color: #ffffff ;
+  background-color: #ffffff;
   transition: 0.3s;
 }
+
 .nav-btn {
   background: transparent;
   border: none;
@@ -30,4 +30,10 @@
 
 .nav-icon {
   font-size: 1.5rem;
+}
+
+.loading {
+  text-transform: capitalize;
+  text-align: center;
+  margin-top: 3rem;
 }
