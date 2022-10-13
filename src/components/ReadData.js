@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Loading from "./Loading";
 import { Firestore } from "firebase/firestore";
+import { useNavigate } from "react-router-dom"
 import { database } from "../firebaseConfig"
-import { getDocs, collection, collectionGroup } from 'firebase/firestore';
+import { getDocs, collection, collectionGroup, doc, getDoc } from 'firebase/firestore';
 
 function getNumberOfPages(rowCount, rowsPerPage) {
   return Math.ceil(rowCount / rowsPerPage);
@@ -30,6 +31,7 @@ const data = [
 ]
 
 const columns = [
+
   {
     name: "Id",
     selector: (row) => row.id,
@@ -133,15 +135,28 @@ const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
     <label className="form-check-label" id="booty-check" />
   </div>
 ));
+const readDocument = async (docRef) => {
+  try {
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  } catch (error) {
+    console.log(error)
 
+  }
+}
 export default function ReadData() {
 
   const [students, setStudents] = useState([
     {}
   ]);
+  const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState({});
   const collectionRef = collection(database, 'students');
+/* 
+  const docRef = doc(database, "students", "5f6kY9cAqBR6rBjS5Hbj");
+
+  readDocument(docRef); */
 
 
   const handleChange = (event) => {
@@ -150,6 +165,7 @@ export default function ReadData() {
   }
   const handleSearch = () => {
     setLoading(true);
+
     getDocs(collectionRef)
       .then((response) => {
         setStudents(
@@ -164,6 +180,10 @@ export default function ReadData() {
         console.log(err.message)
       })
   }
+  const handleEdit = (event, id) => {
+    navigate(`/readdata/${id}`);
+  }
+  const onRowClicked = (row, event) => { handleEdit(event, row.id); };
 
   /*   useEffect(() => {
   
@@ -220,7 +240,11 @@ export default function ReadData() {
             defaultSortFieldID={1}
             pagination
             paginationComponent={BootyPagination}
+            onRowClicked={onRowClicked}
             selectableRows
+            selectableRowsHighlight
+            highlightOnHover
+            pointerOnHover
             selectableRowsComponent={BootyCheckbox}
           />}
         </div>
