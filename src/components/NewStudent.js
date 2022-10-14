@@ -26,8 +26,8 @@ const CreateData = () => {
     setMessageVis(false);
   }
   const showAlert = (message, type) => {
-    setMessage(message)
-    setMessageType(type)
+    setMessage(message);
+    setMessageType(type);
     setMessageVis(true);
   }
   const handleSubmit = (event) => {

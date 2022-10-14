@@ -1,126 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import Loading from "./Loading";
-import { Firestore } from "firebase/firestore";
 import { useNavigate } from "react-router-dom"
+import Alert from './Alert';
 import { database } from "../firebaseConfig"
-import { getDocs, collection, collectionGroup, doc, getDoc } from 'firebase/firestore';
+import { getDocs, collection, doc, deleteDoc } from 'firebase/firestore';
 
-function getNumberOfPages(rowCount, rowsPerPage) {
-  return Math.ceil(rowCount / rowsPerPage);
-}
-
-function toPages(pages) {
-  const results = [];
-
-  for (let i = 1; i < pages; i++) {
-    results.push(i);
-  }
-
-  return results;
-}
-const data = [
-  {
-    title: '213421',
-    director: 'safasfas'
-  },
-  {
-    title: '213421',
-    director: 'safasfas'
-  }
-]
-
-const columns = [
-
-  {
-    name: "Id",
-    selector: (row) => row.id,
-    sortable: true
-  },
-  {
-    name: "Name",
-    selector: (row) => row.user,
-    sortable: true
-  },
-  {
-    name: "Password",
-    selector: (row) => row.password,
-    sortable: true
-  }
-
-];
-
-// RDT exposes the following internal pagination properties
-const BootyPagination = ({
-  rowsPerPage,
-  rowCount,
-  onChangePage,
-  onChangeRowsPerPage, // available but not used here
-  currentPage
-}) => {
-  const handleBackButtonClick = () => {
-    onChangePage(currentPage - 1);
-  };
-
-  const handleNextButtonClick = () => {
-    onChangePage(currentPage + 1);
-  };
-
-  const handlePageNumber = (e) => {
-    onChangePage(Number(e.target.value));
-  };
-
-  const pages = getNumberOfPages(rowCount, rowsPerPage);
-  const pageItems = toPages(pages);
-  const nextDisabled = currentPage === pageItems.length;
-  const showButtons = !(currentPage === pageItems.length + 1);
-  const previosDisabled = currentPage === 1;
-
-  return (
-    <nav>
-      {showButtons && <ul className="pagination">
-        <li className="page-item">
-          <button
-            className="page-link"
-            onClick={handleBackButtonClick}
-            disabled={previosDisabled}
-            aria-disabled={previosDisabled}
-            aria-label="previous page"
-          >
-            Previous
-          </button>
-        </li>
-        {pageItems.map((page) => {
-          const className =
-            page === currentPage ? "page-item active" : "page-item";
-
-          return (
-            <li key={page} className={className}>
-              <button
-                className="page-link"
-                onClick={handlePageNumber}
-                value={page}
-              >
-                {page}
-              </button>
-            </li>
-          );
-        })}
-        <li className="page-item">
-          <button
-            className="page-link"
-            onClick={handleNextButtonClick}
-            disabled={nextDisabled}
-            aria-disabled={nextDisabled}
-            aria-label="next page"
-          >
-            Next
-          </button>
-        </li>
-      </ul>}
-    </nav>
-  );
-};
 
 const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
   <div className="form-check">
@@ -135,28 +20,63 @@ const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
     <label className="form-check-label" id="booty-check" />
   </div>
 ));
-const readDocument = async (docRef) => {
-  try {
-    const docSnap = await getDoc(docRef);
-    return docSnap.data();
-  } catch (error) {
-    console.log(error)
 
-  }
-}
 export default function ReadData() {
-
-  const [students, setStudents] = useState([
-    {}
-  ]);
+  const [students, setStudents] = useState([{}]);
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState({});
   const collectionRef = collection(database, 'students');
-/* 
-  const docRef = doc(database, "students", "5f6kY9cAqBR6rBjS5Hbj");
+  const [message, setMessage] = useState('initial message, no errors')
+  const [messageType, setMessageType] = useState('');
+  const [isMessageVis, setMessageVis] = useState(false);
 
-  readDocument(docRef); */
+  const removeAlert = () => {
+    setMessage('')
+    setMessageType('')
+    setMessageVis(false);
+  }
+  const showAlert = (message, type) => {
+    setMessage(message)
+    setMessageType(type)
+    setMessageVis(true);
+  }
+
+  const columns = [
+    {
+      name: "Id",
+      selector: (row) => row.id,
+      sortable: true
+    },
+    {
+      name: "Name",
+      selector: (row) => row.user,
+      sortable: true
+    },
+    {
+      name: "Password",
+      selector: (row) => row.password,
+      sortable: true
+    }, !students
+      ? { name: "Delete Row" }
+      : {
+        name: "Delete Row",
+        sortable: true,
+        cell: (row) => <button className="btn btn-outline-dark" onClick={(e) => {
+          const docRef = doc(database, "students", row.id);
+          deleteDoc(docRef)
+            .then(() => {
+              showAlert("Data deleted", "info")
+              handleSearch();
+            }).catch((err) => {
+              alert(err.message);
+            })
+        }}>Delete Row</button>
+      }
+
+  ];
+
+
 
 
   const handleChange = (event) => {
@@ -173,7 +93,6 @@ export default function ReadData() {
             return { ...item.data(), id: item.id }
           })
         )
-        console.log(students)
         setLoading(false);
 
       }).catch((err) => {
@@ -185,22 +104,6 @@ export default function ReadData() {
   }
   const onRowClicked = (row, event) => { handleEdit(event, row.id); };
 
-  /*   useEffect(() => {
-  
-      getDocs(collectionRef)
-        .then((response) => {
-          setStudents(...students,
-            response.docs.map((item) => {
-              return { ...item.data(), id: item.id }
-            })
-          )
-          console.log(students)
-          setLoading(false);
-  
-        }).catch((err) => {
-          console.log(err.message)
-        })
-    }, [collectionRef]) */
   return (
     <article className="App">
       <section className="card">
@@ -227,6 +130,10 @@ export default function ReadData() {
               <p>{data.currentTable} <strong>Selected</strong> </p>
             </div>
           </div>
+          <div class="p-2 row justify-content-md-left">
+            {isMessageVis &&
+              <Alert removeAlert={removeAlert} message={message} type={messageType} />}
+          </div>
         </div>
         <div>
 
@@ -239,7 +146,6 @@ export default function ReadData() {
             data={students}
             defaultSortFieldID={1}
             pagination
-            paginationComponent={BootyPagination}
             onRowClicked={onRowClicked}
             selectableRows
             selectableRowsHighlight
