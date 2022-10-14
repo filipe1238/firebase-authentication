@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { database } from '../firebaseConfig';
 import Alert from './Alert';
 import UpdateForm from './forms/UpdateForm';
-import Loading from "./Loading";
+import Loading from "./extra components/Loading";
 
 const readDocument = async (docRef, SetOldStudent, SetNewStudent, setLoading) => {
   try {
@@ -64,8 +64,8 @@ const UpdateStudent = () => {
   return (
     <article className="App">
       <section className="card">
-        <div class="container">
-          <div class="p-2">
+        <div className="container">
+          <div className="p-2">
             {/*    <p>new user: {newStudent.user}</p> */}
             <a href="/readdata" className='link-secondary'><GoArrowLeft className='icon-backarrow' /></a>
             <h3>Update for student '{oldStudent.user}' its id is: '{id}'</h3>

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
-import Loading from "./Loading";
+import Loading from "./extra components/Loading";
 import { useNavigate } from "react-router-dom"
 import Alert from './Alert';
 import { database } from "../firebaseConfig"
 import { getDocs, collection, doc, deleteDoc } from 'firebase/firestore';
+import ReadDataHeader from "./headers/ReadDataHeader";
 
 
 const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
@@ -15,8 +16,7 @@ const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
       className="form-check-input"
       ref={ref}
       onClick={onClick}
-      {...rest}
-    />
+      {...rest} />
     <label className="form-check-label" id="booty-check" />
   </div>
 ));
@@ -107,37 +107,10 @@ export default function ReadData() {
   return (
     <article className="App">
       <section className="card">
-        <div class="container">
-          <div class="p-2 row justify-content-md-left">
-            <div class="col-md-auto">
-              <p>Click to Update List</p>
-            </div>
-            <div class="col-md-auto">
-              <select onChange={(e) => {
-                handleChange(e)
-              }}
-                class="form-select mb-2"
-                name="currentTable">
-
-                <option defaultValue>Student</option>
-                <option>One</option>
-              </select>
-            </div>
-            <div class="col-md-auto">
-              <button className="btn btn-outline-dark" onClick={handleSearch}>Update</button>
-            </div>
-            <div class="col-md-auto">
-              <p>{data.currentTable} <strong>Selected</strong> </p>
-            </div>
-          </div>
-          <div class="p-2 row justify-content-md-left">
-            {isMessageVis &&
-              <Alert removeAlert={removeAlert} message={message} type={messageType} />}
-          </div>
-        </div>
-        <div>
-
-
+        <ReadDataHeader data={data} handleChange={handleChange} handleSearch={handleSearch} />
+        <div className="p-2 row justify-content-md-left">
+          {isMessageVis &&
+            <Alert removeAlert={removeAlert} message={message} type={messageType} />}
         </div>
         <div>
           {isLoading ? <Loading /> : <DataTable
