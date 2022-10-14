@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
-import Loading from "./extra components/Loading";
+import Loading from "./extra-components/Loading";
 import { useNavigate } from "react-router-dom"
 import Alert from './Alert';
 import { database } from "../firebaseConfig"

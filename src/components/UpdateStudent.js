@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { database } from '../firebaseConfig';
 import Alert from './Alert';
 import UpdateForm from './forms/UpdateForm';
-import Loading from "./extra components/Loading";
+import Loading from "./extra-components/Loading";
 
 const readDocument = async (docRef, SetOldStudent, SetNewStudent, setLoading) => {
   try {

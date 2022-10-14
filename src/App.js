@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
-import Navbar from './components/extra components/Navbar';
-import Error from './components/extra components/Error';
+import Navbar from './components/extra-components/Navbar';
+import Error from './components/extra-components/Error';
 import Home from './components/Home';
 import Login from './components/Login';
 import NewStudent from './components/NewStudent'
