@@ -46,7 +46,6 @@ function Login({ setShowNav }) {
     /* use 'createUserWithEmailAndPassword' for registrations */
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((response) => {
-        console.log(response.user);
         localStorage.setItem('user', JSON.stringify(response.user));
         /*    const stringifiedPerson = localStorage.getItem('user'); */
         const personAsObjectAgain = JSON.parse(localStorage.getItem('user'));

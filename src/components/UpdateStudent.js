@@ -13,7 +13,6 @@ const readDocument = async (docRef, SetOldStudent, SetNewStudent, setLoading) =>
     SetOldStudent(docSnap.data());
     SetNewStudent(docSnap.data());
     setLoading(false);
-    console.log(docSnap.data());
   } catch (error) {
     console.log(error)
 
