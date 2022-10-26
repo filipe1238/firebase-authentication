@@ -37,3 +37,16 @@
   text-align: center;
   margin-top: 3rem;
 }
+@media screen and (max-width: 650px) {
+  .img-cup {
+    display: none;
+  }
+}
+@media screen and (max-width: 650px) {
+  .img-cup {
+    display: none;
+  }
+}
+.little-input{
+  width: 5rem;
+}

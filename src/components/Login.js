@@ -4,7 +4,7 @@ import { BsGoogle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Alert from './Alert';
 import { app } from "../firebaseConfig"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import './styles.css';
 import { type } from '@testing-library/user-event/dist/type';
@@ -32,9 +32,19 @@ function Login({ setShowNav }) {
     setMessageType(type)
     setMessageVis(true);
   }
-
-
-
+  const resetPassword = (event, email) => {
+    event.preventDefault();
+    sendPasswordResetEmail(auth, email)
+      .then((response) => {
+        showAlert(response.message, 'success')
+      })
+      .catch((error) => {
+        showAlert(error.message, 'danger')
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  }
 
 
   const handleChange = (event) => {
@@ -103,7 +113,7 @@ function Login({ setShowNav }) {
                       Sign in
                     </button></div>
                   <div>
-                    {isMessageVis && <Alert message={message} type={messageType} removeAlert={removeAlert}/>}
+                    {isMessageVis && <Alert message={message} type={messageType} removeAlert={removeAlert} />}
                   </div>
                   <div>
                     <p>Or choose</p>
@@ -125,8 +135,11 @@ function Login({ setShowNav }) {
                   </button>
                 </div> */}
               </form>
-              <a href="/home" className='link-secondary'><GoArrowLeft className='icon-backarrow' /></a>
 
+              <div><a href="/login" class="link-secondary" onClick={(e)=>{
+                resetPassword(e, data.email)
+              }}>forgot password ?</a></div>
+              <a href="/home" className='link-secondary'><GoArrowLeft className='icon-backarrow' /></a>
             </div>
           </div>
         </div>
