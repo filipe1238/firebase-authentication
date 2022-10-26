@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ReadDataHeader = ({data, handleChange, handleSearch}) => {
+const ReadDataHeader = ({ data, handleChange, handleSearch }) => {
   return (
     <div className="container">
       <div className="p-2 row justify-content-md-left">
@@ -12,10 +12,13 @@ const ReadDataHeader = ({data, handleChange, handleSearch}) => {
             handleChange(e)
           }}
             className="form-select mb-2"
-            name="currentTable">
+            name="currentTable"
+            value={data.currentTable}
+          >
 
-            <option defaultValue>Student</option>
-            <option>One</option>
+            <option defaultValue>Select One</option>
+            <option>students</option>
+            <option>products</option>
           </select>
         </div>
         <div className="col-md-auto">
@@ -25,7 +28,7 @@ const ReadDataHeader = ({data, handleChange, handleSearch}) => {
           <p>{data.currentTable} <strong>Selected</strong> </p>
         </div>
       </div>
-      
+
     </div>
   )
 }
