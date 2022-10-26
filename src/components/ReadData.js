@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Loading from "./extra-components/Loading";
 import { useNavigate } from "react-router-dom"
@@ -22,27 +22,7 @@ const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 ));
 
 export default function ReadData() {
-  const [students, setStudents] = useState([{}]);
-  const navigate = useNavigate();
-  const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState({});
-  const collectionRef = collection(database, 'students');
-  const [message, setMessage] = useState('initial message, no errors')
-  const [messageType, setMessageType] = useState('');
-  const [isMessageVis, setMessageVis] = useState(false);
-
-  const removeAlert = () => {
-    setMessage('')
-    setMessageType('')
-    setMessageVis(false);
-  }
-  const showAlert = (message, type) => {
-    setMessage(message)
-    setMessageType(type)
-    setMessageVis(true);
-  }
-
-  const columns = [
+  const [dynamicColumns, setDynamicColumns] = useState([
     {
       name: "Id",
       selector: (row) => row.id,
@@ -57,13 +37,44 @@ export default function ReadData() {
       name: "Password",
       selector: (row) => row.password,
       sortable: true
-    }, !students
+    },
+  ]);
+  const [students, setStudents] = useState([]);
+  const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState({ currentTable: 'Select One' });
+  const [collectionRef, setCollectionRef] = useState({});
+  const [message, setMessage] = useState('initial message, no errors')
+  const [messageType, setMessageType] = useState('');
+  const [isMessageVis, setMessageVis] = useState(false);
+
+  useEffect(() => {
+    if (database && data.currentTable)
+      setCollectionRef(collection(database, data.currentTable));
+  }, [data.currentTable]);
+
+  const removeAlert = () => {
+    setMessage('');
+    setMessageType('');
+    setMessageVis(false);
+  }
+  const showAlert = (message, type) => {
+    setMessage(message)
+    setMessageType(type)
+    setMessageVis(true);
+  }
+
+
+
+  const columns = [
+    ...dynamicColumns,
+    !students
       ? { name: "Delete Row" }
       : {
         name: "Delete Row",
         sortable: true,
         cell: (row) => <button className="btn btn-outline-dark" onClick={(e) => {
-          const docRef = doc(database, "students", row.id);
+          const docRef = doc(database, data.currentTable, row.id);
           deleteDoc(docRef)
             .then(() => {
               showAlert("Data deleted", "info")
@@ -73,12 +84,7 @@ export default function ReadData() {
             })
         }}>Delete Row</button>
       }
-
   ];
-
-
-
-
   const handleChange = (event) => {
     let newInput = { [event.target.name]: event.target.value }
     setData({ ...data, ...newInput });
@@ -94,13 +100,12 @@ export default function ReadData() {
           })
         )
         setLoading(false);
-
       }).catch((err) => {
         console.log(err.message)
       })
   }
   const handleEdit = (event, id) => {
-    navigate(`/readdata/${id}`);
+    navigate(`/readdata/${data.currentTable}/${id}`);
   }
   const onRowClicked = (row, event) => { handleEdit(event, row.id); };
 
@@ -114,7 +119,7 @@ export default function ReadData() {
         </div>
         <div>
           {isLoading ? <Loading /> : <DataTable
-            title={data.currentTable || "Students"}
+            title={data.currentTable || "Please select one Table"}
             columns={columns}
             data={students}
             defaultSortFieldID={1}

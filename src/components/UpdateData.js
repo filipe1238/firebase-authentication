@@ -1,9 +1,8 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { GoArrowLeft } from 'react-icons/go';
 import { useParams } from 'react-router-dom'
 import { database } from '../firebaseConfig';
-import Alert from './Alert';
 import UpdateForm from './forms/UpdateForm';
 import Loading from "./extra-components/Loading";
 
@@ -25,7 +24,7 @@ const UpdateStudent = () => {
   const [oldStudent, SetOldStudent] = useState({});
   const [newStudent, SetNewStudent] = useState({});
   const [isLoading, setLoading] = useState(true);
-  const { id } = useParams();
+  const { id, type } = useParams();
 
   const removeAlert = () => {
     setMessage('')
@@ -38,7 +37,7 @@ const UpdateStudent = () => {
     setMessageVis(true);
   }
   const docRef = useMemo(() => {
-    return doc(database, "students", id);
+    return doc(database, type, id);
   }, [id]);
 
   useEffect(() => {
@@ -68,7 +67,7 @@ const UpdateStudent = () => {
           <div className="p-2">
             {/*    <p>new user: {newStudent.user}</p> */}
             <a href="/readdata" className='link-secondary'><GoArrowLeft className='icon-backarrow' /></a>
-            <h3>Update for student '{oldStudent.user}' its id is: '{id}'</h3>
+      {/*       <h3>Update for student '{oldStudent.user}' its id is: '{id}'</h3> */}
             {isLoading ? <Loading /> :
               <UpdateForm
                 handleSubmit={handleSubmit}

@@ -9,8 +9,8 @@ const UpdateForm = ({ handleSubmit, handleChange, newData, isMessageVis, message
     }}>
       {Object.entries(newData).sort().map(([key, value]) => {
         return <div key={`form-${key}`} className="mb-3">
-          <label className="form-label">Student's {key}</label>
-          <input type="user" onChange={(e) => {
+          <h5 className="form-label">{key}</h5>
+          <input type="text" onChange={(e) => {
             handleChange(e)
           }} name={key} defaultValue={value} className="form-control" aria-describedby="emailHelp" />
         </div>
