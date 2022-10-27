@@ -16,26 +16,28 @@ const ResetPassword = () => {
   }
   const [data, setData] = useState({});
 
-  /*   const resetPassword = (event, email) => {
-      event.preventDefault();
-      sendPasswordResetEmail(auth, email)
-        .then((response) => {
-          showAlert(response.message, 'success')
-        })
-        .catch((error) => {
-          showAlert(error.message, 'danger')
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // ..
-        });
-    } */
+  const resetPassword = (event, email) => {
+    event.preventDefault();
+    sendPasswordResetEmail(auth, email)
+      .then((response) => {
+       /*  console.log(response.message) */
+        /* showAlert(response.message, 'success') */
+      })
+      .catch((error) => {
+        console.log(error.message)
+        /*  showAlert(error.message, 'danger') */
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  }
   return (
     <div className="container">
       <div className="row">
         <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
           <div className="card border-0 shadow rounded-3 my-5">
             <div className="card-body p-4 p-sm-5">
-              <h5 className="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
+              <h5 className="card-title text-center mb-5 fw-light fs-5">reset</h5>
               <form onSubmit={(e) => {
                 /*  handleSubmit(e) */
               }}>
@@ -51,8 +53,11 @@ const ResetPassword = () => {
                     placeholder="name@example.com" />
                   <label htmlFor="floatingInput">Email address</label>
                 </div>
-                <button className="btn btn-secondary btn-login text-uppercase fw-bold" type="submit">
-                 Reset
+                <button onClick={(e) => {
+                  resetPassword(e, data.email)
+                }}
+                  className="btn btn-secondary btn-login text-uppercase fw-bold" type="submit">
+                  Reset
                 </button>
               </form>
 
