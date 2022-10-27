@@ -6,7 +6,6 @@ import Login from './components/Login';
 import NewStudent from './components/NewStudent'
 import UpdateData from './components/UpdateData';
 import { useState } from 'react';
-import Search from './components/Search';
 import CreateData from './components/CreateData';
 import './App.css'
 import ReadData from './components/ReadData';
