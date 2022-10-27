@@ -24,6 +24,7 @@ const NavBar = () => {
             <Nav className="me-auto">
               <Nav.Link href="/home">Home</Nav.Link>
               <Nav.Link href="/createdata">New user</Nav.Link>
+              <Nav.Link href="/createproduct">New product</Nav.Link>
               <Nav.Link href="/newstudent">Create Student</Nav.Link>
               <Nav.Link href="/readdata">SearchData</Nav.Link>
 

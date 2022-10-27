@@ -44,16 +44,27 @@ const NewProducForm = ({ handleSubmit, handleChange }) => {
                       }}
                       name="quantity"
                       type="number"
-               /*        step="1" 
-                      pattern="\d+" */
+                      /*        step="1" 
+                             pattern="\d+" */
                       className='form-control'
                       id="floatingValue"
                       placeholder="quantity" />
                   </div>
-                  <label htmlFor="floatingValue" className='col'>Qt</label>
-                  
+                  {/* <label htmlFor="floatingValue" className='col'>Qt</label> */}
+                  <select
+                    className='col form-control mr-3'
+                    name="quantityType"
+                    type="number"
+                    onChange={(e) => {
+                      handleChange(e)
+                    }}>
+                    <option defaultValue > Select</option>
+                    <option >UN</option>
+                    <option>L</option>
+                    <option>Kg</option>
+                  </select>
                 </div>
-            {/*     <div className="form-check mb-3">
+                {/*     <div className="form-check mb-3">
                   <input className="form-check-input" type="checkbox" value="" id="rememberPasswordCheck" />
                   <label className="form-check-label" htmlFor="rememberPasswordCheck">
                     Remember password
@@ -65,9 +76,7 @@ const NewProducForm = ({ handleSubmit, handleChange }) => {
                       register
                     </button>
                   </div>
-
                 </div>
-
                 <hr className="my-4" />
 
               </form>

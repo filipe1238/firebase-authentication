@@ -38,6 +38,7 @@ const NewProduct = () => {
         product: data.product,
         price: data.price,
         quantity: data.quantity,
+        quantityType: data.quantityType,
       }
     ).then(() => {
       showAlert('Data Added', 'info')
