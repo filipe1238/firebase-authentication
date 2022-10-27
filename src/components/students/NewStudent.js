@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
-import { app, database } from "../firebaseConfig"
+import { app, database } from "../../firebaseConfig"
 import { addDoc, collection  } from 'firebase/firestore';
-import Alert from './Alert';
+import Alert from '../Alert';
 
 const CreateData = () => {
   /*   let navigate = useNavigate(); */

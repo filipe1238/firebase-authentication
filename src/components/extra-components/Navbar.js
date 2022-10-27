@@ -4,9 +4,7 @@ import { Navbar, Container, NavDropdown, Nav } from 'react-bootstrap';
 
 const NavBar = () => {
   const [logged, setLogged] = useState(false);
-
   useEffect(() => {
-
     if (localStorage.getItem('user')) {
       setLogged(true);
     } else {
@@ -23,22 +21,17 @@ const NavBar = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/home">Home</Nav.Link>
-              <Nav.Link href="/createdata">New user</Nav.Link>
-              <Nav.Link href="/createproduct">New product</Nav.Link>
-              <Nav.Link href="/newstudent">Create Student</Nav.Link>
-              <Nav.Link href="/readdata">SearchData</Nav.Link>
 
-              {/*   <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
+              <NavDropdown disabled={!logged} title="Create data" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/newstudent">Create Student</NavDropdown.Item>
+                {/*   <NavDropdown.Divider /> */}
+                <NavDropdown.Item href="/createproduct">
+                  Create Product
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown> */}
+              </NavDropdown>
+
+              <Nav.Link  disabled={!logged} href="/readdata">SearchData</Nav.Link>
+
 
             </Nav>
           </Navbar.Collapse>
@@ -48,15 +41,21 @@ const NavBar = () => {
                 <NavDropdown.Item href="/home"
                   onClick={() => {
                     localStorage.removeItem('user');
-                  }}
-                >
+                  }}>
                   Logout
                 </NavDropdown.Item>
               </NavDropdown>
-            </> :
+            </> : <>
               <Navbar.Text>
-                <a href="/login">Login</a>
-              </Navbar.Text>}
+                <a href="/login" className=''>Login </a>
+              </Navbar.Text>
+              <Navbar.Text>
+                <p className='ml-2 mr-2'>or</p>
+              </Navbar.Text>
+              <Navbar.Text>
+                <a href="/createdata" className='text-nowrap'>Create Account</a>
+              </Navbar.Text>
+            </>}
           </Nav>
         </Container>
       </Navbar >

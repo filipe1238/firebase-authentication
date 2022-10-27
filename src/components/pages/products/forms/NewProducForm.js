@@ -78,10 +78,7 @@ const NewProducForm = ({ handleSubmit, handleChange }) => {
                   </div>
                 </div>
                 <hr className="my-4" />
-
               </form>
-
-
             </div>
           </div>
         </div>
