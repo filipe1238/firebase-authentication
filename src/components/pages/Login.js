@@ -115,12 +115,12 @@ function Login({ setShowNav }) {
                   <div>
                     {isMessageVis && <Alert message={message} type={messageType} removeAlert={removeAlert} />}
                   </div>
-                  <div>
+                {/*   <div>
                     <p>Or choose</p>
                   </div>
                   <div className="row justify-content-left">
                     <button className="col-md-1 nav-btn"><BsGoogle type='nav-icons' /></button>
-                  </div>
+                  </div> */}
                 </div>
 
                 <hr className="my-4" />
