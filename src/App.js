@@ -3,7 +3,7 @@ import Navbar from './components/extra-components/Navbar';
 import Error from './components/extra-components/Error';
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
-import NewStudent from './components/students/NewStudent'
+import NewStudent from './components/pages/students/NewStudent'
 import UpdateData from './components/UpdateData';
 import { useState } from 'react';
 import CreateData from './components/pages/CreateData';
@@ -12,7 +12,6 @@ import ReadData from './components/ReadData';
 import Footer from './components/pages/Footer';
 import ResetPassword from './components/extra-components/ResetPassword';
 import NewProduct from './components/pages/products/NewProduct';
-import ApiTesting from './components/extra-components/api/ApiTesting';
 import ClientProviderAPI from './components/extra-components/api/ClientProviderAPI';
 
 function App() {
