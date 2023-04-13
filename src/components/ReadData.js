@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Loading from "./extra-components/Loading";
-import { useNavigate } from "react-router-dom"
-import Alert from './Alert';
-import { database } from "../firebaseConfig"
-import { getDocs, collection, doc, deleteDoc } from 'firebase/firestore';
+import { useNavigate } from "react-router-dom";
+import Alert from "./Alert";
+import { database } from "../firebaseConfig";
+import { getDocs, collection, doc, deleteDoc } from "firebase/firestore";
 import ReadDataHeader from "./headers/ReadDataHeader";
-
 
 const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
   <div className="form-check">
@@ -16,14 +15,15 @@ const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
       className="form-check-input"
       ref={ref}
       onClick={onClick}
-      {...rest} />
+      {...rest}
+    />
     <label className="form-check-label" id="booty-check" />
   </div>
 ));
 
 export default function ReadData() {
   const [dynamicColumns, setDynamicColumns] = useState([
-    /*    {
+       {
          name: "Id",
          selector: (row) => row.id,
          sortable: true
@@ -37,15 +37,15 @@ export default function ReadData() {
          name: "Password",
          selector: (row) => row.password,
          sortable: true
-       }, */
+       },
   ]);
   const [students, setStudents] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState({ currentTable: 'Select One' });
+  const [data, setData] = useState({ currentTable: "Select One" });
   const [collectionRef, setCollectionRef] = useState({});
-  const [message, setMessage] = useState('initial message, no errors')
-  const [messageType, setMessageType] = useState('');
+  const [message, setMessage] = useState("initial message, no errors");
+  const [messageType, setMessageType] = useState("");
   const [isMessageVis, setMessageVis] = useState(false);
 
   useEffect(() => {
@@ -54,102 +54,136 @@ export default function ReadData() {
   }, [data.currentTable]);
 
   const removeAlert = () => {
-    setMessage('');
-    setMessageType('');
+    setMessage("");
+    setMessageType("");
     setMessageVis(false);
-  }
+  };
   const showAlert = (message, type) => {
-    setMessage(message)
-    setMessageType(type)
+    setMessage(message);
+    setMessageType(type);
     setMessageVis(true);
-  }
-
-
+  };
 
   const columns = [
-    ...dynamicColumns,
+    {
+      name: "Id",
+      selector: (row) => row.id,
+      sortable: true,
+    },
+    {
+      name: "Name",
+      selector: (row) => row.user ? row.user : row.product,
+      sortable: true,
+    },
+    {
+      name: "Info",
+      selector: (row) => row.password ? row.password : "$"+row.price,
+      sortable: true,
+    },
     !students
-      ? { name: "Delete Row" }
+      ? { name: "Delete" }
       : {
-        name: "Delete Row",
-        sortable: true,
-        cell: (row) => <button className="btn btn-outline-dark" onClick={(e) => {
-          const docRef = doc(database, data.currentTable, row.id);
-          deleteDoc(docRef)
-            .then(() => {
-              showAlert("Data deleted", "info")
-              handleSearch();
-            }).catch((err) => {
-              alert(err.message);
-            })
-        }}>Delete Row</button>
-      }
+          name: "Delete",
+          sortable: true,
+          cell: (row) => (
+            <button
+              className="btn btn-outline-dark"
+              onClick={(e) => {
+                const docRef = doc(database, data.currentTable, row.id);
+                deleteDoc(docRef)
+                  .then(() => {
+                    showAlert("Data deleted", "info");
+                    handleSearch();
+                  })
+                  .catch((err) => {
+                    alert(err.message);
+                  });
+              }}
+            >
+              Delete Row
+            </button>
+          ),
+        },
   ];
   const handleChange = (event) => {
-    let newInput = { [event.target.name]: event.target.value }
+    let newInput = { [event.target.name]: event.target.value };
     setData({ ...data, ...newInput });
-  }
+  };
   const handleSearch = () => {
     setLoading(true);
 
     getDocs(collectionRef)
       .then((response) => {
         const newData = response.docs.map((item) => {
-          return { ...item.data(), id: item.id }
+          return { ...item.data(), id: item.id };
         });
         newData.map((item) => {
           return Object.entries(item).map(([key, value]) => {
-            console.log(`added ${key}`)
+            console.log(`added ${key}`);
             let newDynCol = [
               {
                 name: key,
                 selector: (row) => row.key,
-                sortable: true
-              }];
+                sortable: true,
+              },
+            ];
 
             const dynCol = newDynCol;
 
             return setDynamicColumns([newDynCol]);
-
-          })
-        })
-        setStudents(
-          newData
-        );
+          });
+        });
+        setStudents(newData);
         setLoading(false);
-      }).catch((err) => {
-        console.log(err.message)
+      })
+      .catch((err) => {
+        console.log(err.message);
       });
-  }
+  };
   const handleEdit = (event, id) => {
     navigate(`/readdata/${data.currentTable}/${id}`);
-  }
-  const onRowClicked = (row, event) => { handleEdit(event, row.id); };
+  };
+  const onRowClicked = (row, event) => {
+    handleEdit(event, row.id);
+  };
 
   return (
     <article className="App">
       <section className="card">
-        <ReadDataHeader data={data} handleChange={handleChange} handleSearch={handleSearch} />
+        <ReadDataHeader
+          data={data}
+          handleChange={handleChange}
+          handleSearch={handleSearch}
+        />
         <div className="p-2 row justify-content-md-left">
-          {isMessageVis &&
-            <Alert removeAlert={removeAlert} message={message} type={messageType} />}
+          {isMessageVis && (
+            <Alert
+              removeAlert={removeAlert}
+              message={message}
+              type={messageType}
+            />
+          )}
         </div>
         <div>
-          {isLoading ? <Loading /> : <DataTable
-            title={data.currentTable || "Please select one Table"}
-            columns={columns}
-            data={students}
-            defaultSortFieldID={1}
-            pagination
-            onRowClicked={onRowClicked}
-            selectableRows
-            selectableRowsHighlight
-            highlightOnHover
-            pointerOnHover
-            selectableRowsComponent={BootyCheckbox}
-          />}
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <DataTable
+              title={data.currentTable || "Please select one Table"}
+              columns={columns}
+              data={students}
+              defaultSortFieldID={1}
+              pagination
+              onRowClicked={onRowClicked}
+              selectableRows
+              selectableRowsHighlight
+              highlightOnHover
+              pointerOnHover
+              selectableRowsComponent={BootyCheckbox}
+            />
+          )}
         </div>
       </section>
-    </article >
+    </article>
   );
 }
