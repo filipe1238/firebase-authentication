@@ -23,21 +23,21 @@ const BootyCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 
 export default function ReadData() {
   const [dynamicColumns, setDynamicColumns] = useState([
-    {
-      name: "Id",
-      selector: (row) => row.id,
-      sortable: true
-    },
-    {
-      name: "Name",
-      selector: (row) => row.user,
-      sortable: true
-    },
-    {
-      name: "Password",
-      selector: (row) => row.password,
-      sortable: true
-    },
+    /*    {
+         name: "Id",
+         selector: (row) => row.id,
+         sortable: true
+       },
+       {
+         name: "Name",
+         selector: (row) => row.user,
+         sortable: true
+       },
+       {
+         name: "Password",
+         selector: (row) => row.password,
+         sortable: true
+       }, */
   ]);
   const [students, setStudents] = useState([]);
   const navigate = useNavigate();
@@ -94,15 +94,32 @@ export default function ReadData() {
 
     getDocs(collectionRef)
       .then((response) => {
-        setStudents(
-          response.docs.map((item) => {
-            return { ...item.data(), id: item.id }
+        const newData = response.docs.map((item) => {
+          return { ...item.data(), id: item.id }
+        });
+        newData.map((item) => {
+          return Object.entries(item).map(([key, value]) => {
+            console.log(`added ${key}`)
+            let newDynCol = [
+              {
+                name: key,
+                selector: (row) => row.key,
+                sortable: true
+              }];
+
+            const dynCol = newDynCol;
+
+            return setDynamicColumns([newDynCol]);
+
           })
-        )
+        })
+        setStudents(
+          newData
+        );
         setLoading(false);
       }).catch((err) => {
         console.log(err.message)
-      })
+      });
   }
   const handleEdit = (event, id) => {
     navigate(`/readdata/${data.currentTable}/${id}`);
