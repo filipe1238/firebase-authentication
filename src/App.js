@@ -5,7 +5,7 @@ import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import NewStudent from './components/pages/students/NewStudent'
 import UpdateData from './components/UpdateData';
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import CreateData from './components/pages/CreateData';
 import './App.css'
 import ReadData from './components/ReadData';
