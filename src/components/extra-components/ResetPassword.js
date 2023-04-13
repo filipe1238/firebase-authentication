@@ -20,12 +20,12 @@ const ResetPassword = () => {
     event.preventDefault();
     sendPasswordResetEmail(auth, email)
       .then((response) => {
-       /*  console.log(response.message) */
-        /* showAlert(response.message, 'success') */
+        console.log(response.message);
+        //showAlert(response.message, 'success') 
       })
       .catch((error) => {
         console.log(error.message)
-        /*  showAlert(error.message, 'danger') */
+       // showAlert(error.message, 'danger')
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
